@@ -1,18 +1,45 @@
+<div align="center">
+
 # ⚡ Arch Drop
 
-> **Apple-grade continuity between Arch Linux (Hyprland) and Android. Zero cloud. Zero root. Zero bloat.**
+**Apple-grade continuity between Arch Linux (Hyprland) and Android.**  
+*Instant P2P file drops • Universal clipboard • Continuity camera • Low-latency PipeWire audio*
 
 [![Rust](https://img.shields.io/badge/Rust-1.80%2B-orange.svg?style=flat-square&logo=rust)](https://www.rust-lang.org/)
 [![Android](https://img.shields.io/badge/Android-API%2029%2B-green.svg?style=flat-square&logo=android)](https://developer.android.com/)
 [![Hyprland](https://img.shields.io/badge/Compositor-Hyprland%20%2F%20Wayland-00c8ff.svg?style=flat-square)](https://hyprland.org/)
+[![Memory](https://img.shields.io/badge/Daemon%20Memory-%3C15%20MB%20RSS-brightgreen.svg?style=flat-square)](#architecture)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
-[![Memory](https://img.shields.io/badge/Memory-%3C15%20MB%20RSS-brightgreen.svg?style=flat-square)](#architecture)
 
-Arch Drop delivers a seamless personal device continuity ecosystem connecting an Android smartphone with an Arch Linux desktop running Hyprland. Instant peer-to-peer file drops, bi-directional universal clipboard, continuity camera, low-latency audio streaming, and ambient proximity discovery—without third-party clouds, manual IP configuration, or battery drain.
+<br/>
+
+**Zero cloud. Zero root. Zero bloat.**
+
+</div>
 
 ---
 
-## ✨ Features
+## 📱 App Experience
+
+<div align="center">
+
+| **Drop Dashboard** | **Continuity Studio (Audio)** |
+|:---:|:---:|
+| <img src="docs/screenshots/dashboard.png" width="340" alt="Drop Dashboard"/> | <img src="docs/screenshots/audio_continuity.png" width="340" alt="Wireless Audio Continuity"/> |
+
+| **Continuity Camera (V4L2)** | **Device Pairing & Discovery** |
+|:---:|:---:|
+| <img src="docs/screenshots/camera_continuity.png" width="340" alt="Continuity Camera"/> | <img src="docs/screenshots/device_pairing.png" width="340" alt="Device Pairing Sheet"/> |
+
+</div>
+
+<p align="center">
+  <sub>Captured on physical Android companion device running Material 3 + Cupertino-inspired UI.</sub>
+</p>
+
+---
+
+## ✨ Highlights
 
 - 🚀 **High-Speed AirDrop / LocalSend v2**: Direct peer-to-peer file and folder streaming powered by Hyper 1.11 with Ring mTLS certificate pinning and SHA-256 fingerprint verification.
 - 📋 **Wayland Universal Clipboard**: Native `ext_data_control_manager_v1` integration. Adopts Apple's **4 KB rule** (inline $\le$ 4 KB, lazy stream $> 4$ KB), **120s ephemeral TTL**, auto-zeroization on screen lock (`systemd-logind`), and password-manager hint filtering.
@@ -99,7 +126,7 @@ archdropd send /path/to/movie.mkv --p2p
 archdropd status --stream
 ```
 
-### 3. Build Android Companion App
+### 3. Build & Install Android Companion App
 
 ```bash
 cd android
@@ -120,4 +147,4 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ## 📄 License
 
-Licensed under the [Apache License, Version 2.0](LICENSE).
+Licensed under the Apache License, Version 2.0.
