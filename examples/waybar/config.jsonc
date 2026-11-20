@@ -1,0 +1,23 @@
+{
+    // Arch Drop: Event-Driven Waybar Module Configuration
+    // Add "custom/archdrop" to "modules-right" in your ~/.config/waybar/config.jsonc
+    "custom/archdrop": {
+        "format": "{}",
+        "format-icons": {
+            "idle": "󰄡",
+            "paired": "󰄡",
+            "inbound": "󰇚",
+            "outbound": "󰕒",
+            "completed": "󰄬",
+            "clipboard": "󰅌",
+            "error": "󰅚",
+            "offline": "󰖪"
+        },
+        "return-type": "json",
+        "exec": "archdropd status --follow",
+        "on-click": "archdropd status",
+        "on-click-right": "archdropd pair list",
+        "restart-interval": 3,
+        "tooltip": true
+    }
+}

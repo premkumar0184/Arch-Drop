@@ -1,0 +1,33 @@
+[Unit]
+Description=Arch Drop Headless Daemon
+Documentation=https://github.com/archdrop/archdrop
+PartOf=graphical-session.target
+After=graphical-session.target network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/archdropd daemon
+Restart=on-failure
+RestartSec=3
+RuntimeDirectory=archdrop
+RuntimeDirectoryMode=0700
+
+# Strict rootless sandboxing
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=-%h/Downloads -%h/.config/archdrop %t/archdrop
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectHostname=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,37 @@
+[package]
+name = "archdrop_core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+# Serialization & Configuration
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+dirs = { workspace = true }
+
+# Error Handling & Utilities
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+time = { workspace = true }
+
+# Cryptography & Identity (Used by crypto.rs)
+ring = { workspace = true }
+rcgen = { workspace = true }
+rsa = { workspace = true }
+pem = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+x509-parser = { workspace = true }
+rustls-pki-types = { workspace = true }
+# SQLite Event Ledger (Phase 3 Milestone 2)
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+
+[dev-dependencies]
+tempfile = "3.17"
+

@@ -1,0 +1,22 @@
+[package]
+name = "archdrop_audio"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+archdrop_core = { workspace = true }
+tokio = { workspace = true, features = ["process", "io-util", "sync", "time"] }
+bytes = { workspace = true }
+opus = { workspace = true }
+zeroize = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.13"

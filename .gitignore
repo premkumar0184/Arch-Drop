@@ -1,0 +1,31 @@
+# Rust Build Artifacts
+/target/
+**/*.rs.bk
+
+# Android & Gradle
+.gradle/
+**/build/
+!build.gradle.kts
+local.properties
+*.apk
+*.aab
+.kotlin/
+*.keystore
+*.jks
+
+# IDE & Editor
+.idea/
+*.iml
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# Reversing & IPSW restore dumps
+/iPhone18,3_27.2_24B119_Restore/
+
+# Internal Agent Transcripts & Workspace
+/.agents/
+
+# Logs & Temporary Files
+*.log

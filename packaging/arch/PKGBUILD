@@ -1,0 +1,38 @@
+# Maintainer: Arch Drop Contributors <archdrop@example.com>
+pkgname=archdropd
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Arch Drop Headless Continuity Daemon for Arch Linux & Hyprland"
+arch=('x86_64')
+url="https://github.com/archdrop/archdrop"
+license=('Apache-2.0')
+depends=('glibc' 'gcc-libs' 'dbus' 'bluez' 'networkmanager' 'wl-clipboard')
+makedepends=('cargo')
+source=()
+sha256sums=()
+
+build() {
+    cd "${startdir}/../.."
+    cargo build --release --locked --bin archdropd
+}
+
+check() {
+    cd "${startdir}/../.."
+    cargo test --release --locked --bin archdropd
+}
+
+package() {
+    cd "${startdir}/../.."
+
+    # Install binary
+    install -Dm755 "target/release/archdropd" "${pkgdir}/usr/bin/archdropd"
+
+    # Install systemd user service unit adjusted for /usr/bin
+    install -dm755 "${pkgdir}/usr/lib/systemd/user"
+    sed "s|ExecStart=.*|ExecStart=/usr/bin/archdropd daemon|" \
+        "systemd/user/archdropd.service" > "${pkgdir}/usr/lib/systemd/user/archdropd.service"
+    chmod 644 "${pkgdir}/usr/lib/systemd/user/archdropd.service"
+
+    # Install documentation and license
+    install -Dm644 "README.md" "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+}

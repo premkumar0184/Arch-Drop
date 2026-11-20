@@ -1,0 +1,47 @@
+/* Arch Drop Hyprland Waybar Integration Stylesheet */
+/* Matches JetBrainsMono Nerd Font Propo and dark theme palette */
+
+#custom-archdrop {
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: rgba(39, 39, 42, 1);
+    color: rgba(161, 161, 170, 1);
+    margin: 5px 10px 5px 0px;
+    font-family: "JetBrainsMono Nerd Font Propo", monospace;
+    font-size: 13px;
+    transition: all 0.25s ease-in-out;
+}
+
+#custom-archdrop.idle {
+    color: rgba(161, 161, 170, 1);
+}
+
+#custom-archdrop.paired {
+    color: rgba(117, 241, 250, 1);
+    font-weight: 600;
+}
+
+#custom-archdrop.transferring {
+    background: rgba(250, 179, 135, 0.15);
+    color: rgba(250, 179, 135, 1);
+    border: 1px solid rgba(250, 179, 135, 0.4);
+    font-weight: 700;
+}
+
+#custom-archdrop.completed {
+    background: rgba(166, 227, 161, 0.2);
+    color: rgba(166, 227, 161, 1);
+    font-weight: 700;
+}
+
+#custom-archdrop.clipboard {
+    background: rgba(117, 241, 250, 0.2);
+    color: rgba(117, 241, 250, 1);
+    font-weight: 600;
+}
+
+#custom-archdrop.error,
+#custom-archdrop.offline {
+    background: rgba(243, 139, 168, 0.2);
+    color: rgba(243, 139, 168, 1);
+}

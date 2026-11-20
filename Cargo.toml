@@ -1,0 +1,114 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/archdrop_core",
+    "crates/archdrop_mesh",
+    "crates/archdrop_transfer",
+    "crates/archdrop_clipboard",
+    "crates/archdrop_wireless",
+    "crates/archdrop_webcam",
+    "crates/archdrop_audio",
+    "crates/archdropd",
+]
+default-members = [
+    "crates/archdrop_core",
+    "crates/archdrop_mesh",
+    "crates/archdrop_transfer",
+    "crates/archdrop_clipboard",
+    "crates/archdrop_wireless",
+    "crates/archdrop_webcam",
+    "crates/archdrop_audio",
+    "crates/archdropd",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Arch Drop Contributors"]
+license = "Apache-2.0"
+repository = "https://github.com/archdrop/archdrop"
+
+[workspace.dependencies]
+# Internal workspace crates
+archdrop_core = { path = "crates/archdrop_core" }
+archdrop_mesh = { path = "crates/archdrop_mesh" }
+archdrop_transfer = { path = "crates/archdrop_transfer" }
+archdrop_clipboard = { path = "crates/archdrop_clipboard" }
+archdrop_wireless = { path = "crates/archdrop_wireless" }
+archdrop_webcam = { path = "crates/archdrop_webcam" }
+archdrop_audio = { path = "crates/archdrop_audio" }
+opus = "0.4.0"
+zeroize = { version = "1.9", features = ["derive"] }
+async-trait = "0.1"
+bluer = { version = "0.17.4", features = ["bluetoothd"] }
+futures = "0.3"
+
+# Serialization & Deserialization
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+toml = "0.8.23"
+
+# System Paths & Filesystem
+dirs = "5.0.1"
+
+# Async Runtime & Core Utilities
+tokio = { version = "1.40", features = ["full"] }
+tokio-stream = "0.1"
+tokio-util = { version = "0.7", features = ["rt", "codec", "io"] }
+bytes = "1.8"
+
+# Hyper & Network Transfer
+hyper = { version = "1.11", features = ["http1", "server"] }
+hyper-util = { version = "0.1", features = ["server", "tokio"] }
+http-body-util = "0.1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls-manual-roots", "stream"] }
+tokio-tungstenite = { version = "0.24", default-features = false, features = ["connect", "rustls-pki-types", "tokio-rustls"] }
+url = "2.5"
+
+# TLS & Cryptography
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+rcgen = { version = "0.14", default-features = false, features = ["crypto", "pem", "ring"] }
+rsa = { version = "0.9", features = ["sha2"] }
+pem = "3.0"
+ring = "0.17"
+sha2 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+x509-parser = { version = "0.18", features = ["verify"] }
+rustls-pki-types = "1.15"
+
+# Wayland, D-Bus & OS
+wl-clipboard-rs = "0.9"
+zbus = { version = "5.0", default-features = false, features = ["tokio"] }
+libc = "0.2"
+
+# CLI & Tracing / Logging
+clap = { version = "4.5", features = ["derive", "env"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "2.0.21"
+anyhow = "1.0"
+uuid = { version = "1.10", features = ["v4", "serde"] }
+time = { version = "0.3", features = ["formatting", "parsing"] }
+
+# Profile Optimizations for Ultra-Low Memory (< 15 MB RSS) and Minimal Binary Size
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+[profile.bench]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+
+# Optimize crypto crates in dev/test to keep RSA-2048 keygen fast and predictable
+[profile.dev.package.rsa]
+opt-level = 3
+
+[profile.dev.package.num-bigint-dig]
+opt-level = 3
+

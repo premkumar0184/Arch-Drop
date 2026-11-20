@@ -1,0 +1,51 @@
+[package]
+name = "archdropd"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+archdrop_core = { workspace = true }
+archdrop_mesh = { workspace = true }
+archdrop_transfer = { workspace = true }
+archdrop_clipboard = { workspace = true }
+archdrop_wireless = { workspace = true }
+archdrop_webcam = { workspace = true }
+archdrop_audio = { workspace = true }
+tokio = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true }
+dirs = { workspace = true }
+hex = { workspace = true }
+sha2 = { workspace = true }
+zbus = { workspace = true }
+libc = { workspace = true }
+tokio-stream = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.13"
+
+[[test]]
+name = "p2p_wireless_e2e_test"
+path = "../../tests/p2p_wireless_e2e_test.rs"
+
+[[test]]
+name = "systemd_service_test"
+path = "../../tests/systemd_service_test.rs"
+
+[[test]]
+name = "ipc_waybar_stream_test"
+path = "../../tests/ipc_waybar_stream_test.rs"
+
+[[test]]
+name = "notification_dbus_test"
+path = "../../tests/notification_dbus_test.rs"
+

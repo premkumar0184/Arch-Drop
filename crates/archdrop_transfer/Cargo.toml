@@ -1,0 +1,39 @@
+[package]
+name = "archdrop_transfer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+archdrop_core = { workspace = true }
+archdrop_mesh = { workspace = true }
+archdrop_clipboard = { workspace = true }
+archdrop_webcam = { workspace = true }
+archdrop_audio = { workspace = true }
+tokio = { workspace = true }
+tokio-stream = { workspace = true }
+tokio-util = { workspace = true }
+bytes = { workspace = true }
+hyper = { workspace = true }
+hyper-util = { workspace = true }
+http-body-util = { workspace = true }
+reqwest = { workspace = true }
+rustls = { workspace = true }
+tokio-rustls = { workspace = true }
+rustls-pki-types = { workspace = true }
+rcgen = { workspace = true }
+ring = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+time = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.13"
+tracing-subscriber = { workspace = true }

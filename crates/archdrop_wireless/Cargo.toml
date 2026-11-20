@@ -1,0 +1,26 @@
+[package]
+name = "archdrop_wireless"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+archdrop_core = { workspace = true }
+bluer = { workspace = true }
+zbus = { workspace = true }
+tokio = { workspace = true }
+tokio-stream = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+ring = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3.17"

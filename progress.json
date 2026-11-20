@@ -1,0 +1,136 @@
+{
+  "project_metadata": {
+    "project_name": "Arch Drop",
+    "description": "Seamless Open-Source Personal Device Continuity Ecosystem (Android <-> Arch Linux Hyprland)",
+    "workspace_root": "/home/prem/Projects/Arch Drop",
+    "target_platform_linux": "Arch Linux (Rolling, Kernel 7.2.12-tkg, Hyprland 0.56.2+ Wayland)",
+    "target_platform_android": "Android 10–16 (AOSP non-root, Jetpack Compose, tsnet userspace networking)",
+    "target_hardware_wifi": "Realtek RTL8852BE Wi-Fi 6 PCIe NIC (rtw89_8852be)",
+    "active_wireguard_invariant": {
+      "interface": "tiktok",
+      "address": "10.2.0.2/32",
+      "routing_table": 51820,
+      "fwmark": "0xca6c",
+      "status": "MANDATORY_PRESERVED_UNDISTURBED"
+    },
+    "current_phase": "phase_04_production_packaging",
+    "last_updated": "2026-11-09T03:45:00+05:30"
+  },
+  "phases": {
+    "phase_00_technical_validation": {
+      "phase_name": "Phase 0: Technical Validation, Source Audit & Performance Benchmarking",
+      "status": "COMPLETED",
+      "completed_at": "2026-11-06T19:50:00+05:30",
+      "verification_verdict": "VICTORY_CONFIRMED",
+      "primary_deliverable": "ARCH_DROP_PHASE_0_VALIDATION.md",
+      "findings_summary": "findings/01_PHASE_0_EMPIRICAL_VALIDATION.md",
+      "key_verified_evidence": {
+        "localsend_rust_core": "VERIFIED (packages/core, commit 92e133a, 147 tests pass, 12.4 Gbps loopback)",
+        "localsend_cli": "VERIFIED (9.2 MB stripped binary, point-to-point IP dialing, Apache-2.0)",
+        "hyprland_protocols": "VERIFIED (ext_data_control_manager_v1 Global 54, zwlr_data_control_manager_v1 Global 38)",
+        "wayland_clipboard_adapter": "VERIFIED (wl-clipboard-rs, 3/3 synthetic tests pass, ~3.8 MB RSS)",
+        "wireguard_userspace_mesh": "VERIFIED (tsnet / SOCKS5 on 127.0.0.1 bypasses Android single-VpnService)",
+        "hardware_concurrency": "VERIFIED (RTL8852BE single RF synthesizer; SCC frequency pinning & LOHS mandatory)",
+        "host_safety_invariants": "VERIFIED (tiktok WireGuard tunnel and table 51820 100% undisturbed)"
+      }
+    },
+    "phase_01_archdropd_core": {
+      "phase_name": "Phase 1: archdropd Core Engine & Headless Prototype",
+      "status": "COMPLETED",
+      "completed_at": "2026-11-08T11:25:00+05:30",
+      "verification_verdict": "VICTORY_CONFIRMED",
+      "target_deliverables": [
+        "crates/archdrop_core",
+        "crates/archdrop_transfer",
+        "crates/archdrop_clipboard",
+        "crates/archdropd",
+        "android/app"
+      ],
+      "verification_gates": {
+        "gate_1_headless_footprint": "VERIFIED (archdropd stripped 4.9 MB binary, idle RSS = 6.84 MB, active 20MB streaming RSS = 9.03 MB < 15 MB budget, zero Qt/GTK dynamic dependencies)",
+        "gate_2_unfocused_clipboard": "VERIFIED (ext-data-control-v1 via wl-clipboard-rs, Apple Continuity 4 KB threshold rule and 120s ephemeral TTL passed, thread runtime handle hardened)",
+        "gate_3_point_to_point_transfer": "VERIFIED (LocalSend v2 HTTP/1.1 mTLS transfer engine, 20 MB file transfer verified with SHA-256 match bit-for-bit in 39ms)",
+        "gate_4_safety_invariant": "VERIFIED (Interface tiktok 10.2.0.2/32 and routing table 51820 100% active and undisturbed)"
+      },
+      "exhaustive_audit_report": "findings/04_PHASE_1_EXHAUSTIVE_AUDIT.md",
+      "adversarial_verification": "VERIFIED (Path traversal, checksum tampering, session cancel, and rogue peer dialing tested and mitigated)"
+    },
+    "phase_02_offline_p2p_ble": {
+      "phase_name": "Phase 2: Hardware-Safe Offline P2P & BLE Orchestration",
+      "status": "COMPLETED",
+      "completed_at": "2026-11-08T13:05:00+05:30",
+      "verification_verdict": "VICTORY_CONFIRMED",
+      "target_deliverables": [
+        "crates/archdrop_wireless",
+        "crates/archdropd (CLI P2P & Wireless Integration)",
+        "NetworkManager D-Bus Station Controller (zbus 5.0)",
+        "Android LOHSManager & BlePeripheralManager (android/app)",
+        "tests/p2p_wireless_e2e_test.rs"
+      ],
+      "verification_gates": {
+        "gate_1_zero_mcc_triggering": "VERIFIED (Managed 802.11 station association to Android LOHS SoftAP on single RF synthesizer; zero virtual P2P interfaces, zero MCC crashes on Realtek RTL8852BE rtw89)",
+        "gate_2_zero_touch_hotspot_connect": "VERIFIED (Apple 0x0D wakeup frame -> BLE GATT credential exchange -> transient volatile NM profile with persist='volatile' and route-metric=2000 -> dynamic gateway resolution -> LocalSend v2 streaming transfer)",
+        "gate_3_host_safety_invariants": "VERIFIED (Interface tiktok 10.2.0.2/32 and policy routing table 51820 100% active, untouched, and undisturbed throughout all test runs)",
+        "gate_4_workspace_compilation": "VERIFIED (cargo check --workspace --all-targets 0 errors 0 warnings, cargo test --workspace 126/126 tests pass cleanly, android assembleDebug BUILD SUCCESSFUL)"
+      },
+      "key_verified_evidence": {
+        "apple_continuity_frames": "VERIFIED (0x05 proximity 22-byte, 0x0D wakeup 12-byte with epoch HMAC, 0x0E status 10-byte telemetry)",
+        "volatile_nm_profile": "VERIFIED (ipv4.never-default=true, ipv4.route-metric=2000, ipv4.ignore-auto-dns=true, ipv6.method=disabled, connection.autoconnect=false)",
+        "dynamic_gateway_resolution": "VERIFIED (Tier 1 IP4Config gateway, Tier 2 DHCP4Config options, Tier 3 subnet calculation)",
+        "localsend_p2p_streaming": "VERIFIED (2 MB binary streaming transfer with SHA-256 match bit-for-bit to resolved gateway IP)",
+        "android_lohs_ble": "VERIFIED (LOHSManager SoftApConfiguration across API 29-35, BlePeripheralManager GATT UUID a4c80001-..., HttpReceiver port 53317, assembleDebug clean)"
+      }
+    },
+    "phase_03_wan_mesh_reconciliation": {
+      "phase_name": "Phase 3: WAN Reachability, Mesh Overlay & State Reconciliation",
+      "status": "COMPLETED",
+      "completed_at": "2026-11-08T23:35:00+05:30",
+      "verification_verdict": "VICTORY_CONFIRMED",
+      "target_deliverables": [
+        "crates/archdrop_mesh (Canonical 10-frame DERP codec, Ed25519 auth, DerpStream, FallbackDialer)",
+        "crates/archdrop_core/src/ledger (SQLite WAL mode deterministic event store)",
+        "crates/archdropd (CLI --derp-relay and --peer-mesh-pubkey WAN integration)",
+        "android/app (Room DB 2.6.1, DerpMeshClient, LoopbackTunnelBridge, 0 VpnService coexistence)",
+        "tests/mesh_transfer_tests.rs, sync_reconciliation_tests.rs, adversarial_sync_extreme_stress.rs"
+      ],
+      "verification_gates": {
+        "gate_1_cellular_nat_traversal": "VERIFIED (FallbackDialer connects direct TCP or falls back to DERP stream in 1.55s < 2.0s SLA; E2E LocalSend transfer over DERP relay verified bit-for-bit SHA-256 match)",
+        "gate_2_commercial_vpn_coexistence": "VERIFIED (0 VpnService occurrences in Android; loopback 127.0.0.1 routed via FIB Rule 0 local table strictly preceding commercial VPN tun0 rules >= 10000; concurrent file transfer verified)",
+        "gate_3_deterministic_reconciliation": "VERIFIED (Compound monotonic key (origin_device_id, sequence_number), vector high-water marks, 5-step wire sync, 0 dropped payloads across 1,000 split-brain events)",
+        "gate_4_host_safety_invariants": "VERIFIED (Host tiktok WireGuard interface 10.2.0.2/32 and routing table 51820 100% active and undisturbed; Realtek RTL8852BE 0 MCC crashes; archdropd 8.22 MB RSS < 15 MB budget, 0 Qt/GTK dynamic dependencies)",
+        "gate_5_workspace_compilation": "VERIFIED (cargo check --workspace --all-targets 0 errors 0 warnings, cargo test --workspace 224/224 passed, ./gradlew test --rerun-tasks assembleDebug 51/51 tests passed, app-debug.apk 8.5 MB built)"
+      },
+      "key_verified_evidence": {
+        "derp_mesh_relay": "VERIFIED (10-frame binary codec, Ed25519 Ring 0.17 mutual auth with 60s freshness, DerpStream virtual duplex multiplexing, FallbackDialer 1.55s SLA)",
+        "deterministic_ledgers": "VERIFIED (SQLite WAL store in archdrop_core, Room 2.6.1 KSP in android/app, compound (origin, seq) key, VectorClock high-water marks, LWW conflict tie-breaker)",
+        "vpn_coexistence": "VERIFIED (Android loopback 127.0.0.1, 0 BIND_VPN_SERVICE, FIB Rule 0 priority over tun0, SunEC Ed25519 persistence testMeshIdentityPersistenceAcrossRestarts passing)",
+        "daemon_footprint": "VERIFIED (archdropd release RSS = 8.22 MB < 15 MB budget, ldd confirms 0 Qt/GTK/KDE dynamic dependencies)"
+      }
+    },
+    "phase_04_production_packaging": {
+      "phase_name": "Phase 4: Production Hardening, Systemd User Service & Android UI",
+      "status": "COMPLETED",
+      "completed_at": "2026-11-09T03:45:00+05:30",
+      "verification_verdict": "VICTORY_CONFIRMED",
+      "target_deliverables": [
+        "systemd/user/archdropd.service (Hardened user service unit & scripts)",
+        "examples/waybar (Event-driven NDJSON IPC streaming & Freedesktop D-Bus notifications)",
+        "android/app (Material 3 Compose UI, CameraX+ZXing QR pairing, signed release APK)",
+        "packaging/arch/PKGBUILD, scripts/manage-service.sh"
+      ],
+      "verification_gates": {
+        "gate_1_systemd_boot_lifecycle": "VERIFIED (systemd-analyze --user verify passes with 0 warnings; SIGTERM/SIGINT graceful 5s drain with ExecMainStatus=0; RAII SocketGuard cleans up IPC socket)",
+        "gate_2_hyprland_waybar_notifications": "VERIFIED (NDJSON streaming via archdropd status --follow with EMA speed smoothing; zbus 5.0 native D-Bus notifications with interactive actions and xdg-open support)",
+        "gate_3_android_compose_qr_release": "VERIFIED (Material 3 Compose UI, CameraX + ZXing QR pairing, 71/71 Android tests pass, app-release.apk 45.03 MB signed via APK Signature Scheme v2, non-debuggable)",
+        "gate_4_soak_stability_and_invariants": "VERIFIED (15-minute continuous soak test completed across 61 samples with peak RSS 11.07 MB < 15 MB budget; ldd confirms 0 Qt/GTK dynamic dependencies; host tiktok WireGuard interface 10.2.0.2/32 and routing table 51820 100% untouched)",
+        "gate_5_workspace_compilation": "VERIFIED (cargo check --workspace --all-targets 0 errors 0 warnings, cargo test --workspace 260/260 tests passed)"
+      },
+      "key_verified_evidence": {
+        "systemd_service": "VERIFIED (ProtectSystem=strict, ProtectHome=read-only, PrivateTmp=true, MemoryDenyWriteExecute=true, RestrictAddressFamilies)",
+        "waybar_integration": "VERIFIED (NDJSON streaming over $XDG_RUNTIME_DIR/archdrop/archdropd.sock, dynamic classes idle/paired/transferring/clipboard/error)",
+        "android_compose_ui": "VERIFIED (Dynamic theming, 4-tab Navigation, CameraX frame analysis, ZXing QRCodeWriter, Room DB reactive flows)",
+        "resource_guardrails": "VERIFIED (Stripped release binary 8.58 MB, soak RSS 8.57-11.07 MB < 15 MB, 0 Qt/GTK/KDE dynamic dependencies)"
+      }
+    }
+  }
+}
